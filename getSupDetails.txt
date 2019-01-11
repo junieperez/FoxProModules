@@ -1,0 +1,11 @@
+PARAMETERS varLocCode
+IF !USED("supplier")
+	DO usetables WITH "supplier"
+ENDIF
+SELECT supplier
+SET FILTER TO
+GO top
+LOCATE FOR supplier.sup_code = varLocCode
+IF FOUND()
+	RETURN alltrim(upper(supplier.sup_name))
+endif

@@ -1,0 +1,11 @@
+PARAMETERS varItmCode
+IF !USED("item_mst")
+	DO usetables WITH "Item_mst"
+ENDIF
+SELECT item_mst
+SET FILTER TO
+GO top
+LOCATE FOR ALLTRIM(UPPER(item_mst.itm_code)) = ALLTRIM(UPPER(varItmCode))
+IF FOUND()
+	RETURN ALLTRIM(UPPER(item_mst.itm_desc))
+endif

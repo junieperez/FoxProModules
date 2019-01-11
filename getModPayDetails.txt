@@ -1,0 +1,12 @@
+PARAMETERS varLocCode
+IF !USED("PMASTER")
+	DO usetables WITH "PMASTER"
+ENDIF
+
+SELECT PMASTER
+SET FILTER TO
+GO top
+LOCATE FOR alltrim(upper(PMASTER.p_code)) = alltrim(upper(varLocCode))
+IF FOUND()
+	RETURN alltrim(upper(PMASTER.p_name))
+endif

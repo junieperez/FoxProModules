@@ -1,0 +1,11 @@
+PARAMETERS varComCode
+IF !USED("Company")
+	DO usetables WITH "company"
+ENDIF
+SELECT company
+SET FILTER TO
+GO top
+LOCATE FOR ALLTRIM(UPPER(company.com_code)) = ALLTRIM(UPPER(varComCode))
+IF FOUND()
+	RETURN ALLTRIM(UPPER(company.com_name))
+endif

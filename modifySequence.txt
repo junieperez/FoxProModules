@@ -1,0 +1,44 @@
+PARAMETERS seqCommand, seqCode
+PUBLIC modCommand,modCode
+modCode = ""
+modCommand = ""
+modCommand = seqCommand
+modCode = seqCode
+
+IF !USED("Sequence")
+	DO usetables WITH "SEQUENCE"
+ENDIF
+
+IF ALLTRIM(UPPER(modCommand)) = "GETNUM"
+LOCAL returnNum
+returnNum = 0
+	SELECT sequence
+	SET FILTER TO
+	GO top
+	LOCATE FOR ALLTRIM(UPPER(sequence.seq_code)) = ALLTRIM(UPPER(modCode))
+	IF !FOUND()
+		SELECT sequence
+		APPEND BLANK
+		replace sequence.seq_code WITH ALLTRIM(UPPER(modCode))
+		replace sequence.seq_num WITH 1
+	ENDIF
+	SELECT sequence
+	returnNum = sequence.seq_num
+	RETURN returnNum
+ENDIF
+
+IF ALLTRIM(UPPER(modCommand)) = "SETNUM"
+	SELECT sequence
+	SET FILTER TO
+	GO top
+	LOCATE FOR ALLTRIM(UPPER(sequence.seq_code)) = ALLTRIM(UPPER(modCode))
+	IF !FOUND()
+		SELECT sequence
+		APPEND BLANK
+		replace sequence.seq_code WITH ALLTRIM(UPPER(modCode))
+		replace sequence.seq_num WITH 1
+	ELSE
+		SELECT sequence
+		replace sequence.seq_num WITH sequence.seq_num + 1
+	ENDIF
+ENDIF

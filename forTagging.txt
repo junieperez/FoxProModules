@@ -1,0 +1,11 @@
+PARAMETERS tblName,searchIN,searchFor,setStatus,getStatus
+SELECT &tblName
+SET FILTER TO
+GO top
+findIN = &tblName+"."+&searchIN
+LOCATE FOR &findIN = searchFor
+IF FOUND()
+	entryStatus = &tblName.&setStatus
+	replace &entryStatus WITH getStatus
+endif
+	

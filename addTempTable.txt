@@ -1,0 +1,44 @@
+*use addEColumns as Public Array
+PARAMETERS tmptblName, getTblName, findIn, findFor
+searchFor = ""
+searchIN = ""
+searchFor = getTblName+"."+findFor
+searchIN = TmpTblName+"."+findIn
+SET DELETED ON
+SELECT &getTblName
+SET FILTER TO
+GO TOP
+DO WHILE !EOF()
+	SELECT &tmpTblName
+	SET FILTER TO
+	GO TOP
+	IF VARTYPE(&searchIN) = "C"
+		LOCATE FOR ALLTRIM(UPPER(&searchIN)) = ALLTRIM(UPPER(&searchFor))
+	ENDIF
+	
+	IF VARTYPE(&searchIN) = "N"
+			LOCATE FOR searchIN= searchFOR
+	ENDIF	
+			IF !FOUND()
+				SELECT &tmpTblName
+				APPEND BLANK
+				getColumnLen = 0
+				getColumnLen = ALEN(addEColumns,1)
+				FOR x=1 TO getColumnLen STEP 1
+					getFromField = getTblName + "." + addEColumns(x,2)
+					addFromField = tmpTblName + "." + addEColumns(x,1)
+							SELECT &tmpTblName
+							IF VARTYPE(&getFromField) = "C"
+								REPLACE &addFromField WITH ALLTRIM(UPPER(&getFromField))
+							ELSE
+								replace &addFromField WITH &getFromField
+							endif
+				ENDFOR
+	endif
+		SELECT &getTblName
+		SKIP
+ENDDO
+
+*addEColumns(1,1) = "tmp_NO"
+*addEColumns(1,2) = "ad_no"
+*thisform.addtemptable("tmpAList","ADJPO_HEAD", "tmp_no", "ad_no")

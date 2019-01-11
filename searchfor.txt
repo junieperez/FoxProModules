@@ -1,0 +1,1 @@
+SET FILTER TO LIKE("*"+ALLTRIM(UPPER(thisform.txtSearch.Value))+"*",ALLTRIM(UPPER(tmpTList.frLoc))) OR LIKE("*"+ALLTRIM(UPPER(thisform.txtSearch.Value))+"*",ALLTRIM(UPPER(tmpTList.toLoc)))

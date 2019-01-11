@@ -1,0 +1,11 @@
+PARAMETERS varLocCode
+IF !USED("Location")
+	DO usetables WITH "location"
+ENDIF
+SELECT location
+SET FILTER TO
+GO top
+LOCATE FOR ALLTRIM(UPPER(location.loc_code)) = ALLTRIM(UPPER(varLocCode))
+IF FOUND()
+	RETURN ALLTRIM(UPPER(location.loc_name))
+endif

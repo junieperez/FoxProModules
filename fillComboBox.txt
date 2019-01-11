@@ -1,0 +1,45 @@
+LOCAL locIAD,LOCFAD,countIAD,countFAD
+countFAD = 0
+countIAD = 0
+locIAD = ""
+locFAD = ""
+locIAD = ALLTRIM(UPPER(thisform.txtlocCd.Value + "-IAD"))
+locFAD = ALLTRIM(UPPER(thisform.txtlocCd.Value + "-FAD"))
+
+*Empty Combo Boxes
+thisform.cbCheckedBy.Clear()
+thisform.cbnotedBy.Clear()
+
+*Set Check By & Noted By (IAD-FAD)
+
+SELECT usertab
+SET FILTER TO
+GO top
+SET FILTER TO ALLTRIM(UPPER(usertab.usr_loc)) = ALLTRIM(UPPER(thisform.txtlocCd.value))
+GO top
+DO WHILE !EOF()
+	IF ALLTRIM(UPPER(usertab.Usr_name)) # ALLTRIM(UPPER(_username))
+		IF ALLTRIM(UPPER(usertab.usr_dept)) = ALLTRIM(UPPER(locIAD))
+			thisform.cbCheckedBy.AddItem(ALLTRIM(UPPER(usertab.usr_name)))
+			countIAD = countIAD+1
+		ENDIF
+		IF ALLTRIM(UPPER(usertab.usr_dept)) = ALLTRIM(UPPER(locFAD))
+			thisform.cbnotedBy.AddItem(ALLTRIM(UPPER(usertab.usr_name)))
+			countFAD = countFAD + 1
+		ENDIF
+	ENDIF
+SELECT usertab
+SKIP
+ENDDO
+
+IF countFAD  =0
+	thisform.txNotedBy.Visible =  .t.
+ELSE
+	thisform.txNotedBy.Visible =  .f.
+ENDIF
+
+IF countIAD = 0
+	thisform.txCheckedBy.Visible =  .t.
+ELSE
+	Thisform.txCheckedBy.Visible =  .f.
+ENDIF

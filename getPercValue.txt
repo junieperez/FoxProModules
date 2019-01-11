@@ -1,0 +1,20 @@
+PARAMETERS passedVal,transTo
+LOCAL passedValue,convTo,retVal
+passedValue = 0
+retVal = 0
+convTo = ""
+
+passedValue = passedVal
+convTo = transTo
+
+*calculate total
+thisform.calculateall()
+*calcitemtotal = variable for given total
+
+IF ALLTRIM(UPPER(convTo)) = "PERCENT"
+retval = (passedValue/calcItemTotal) * 100
+ELSE
+retVal = (passedValue/100) * calcItemTotal 
+ENDIF
+
+RETURN retVal

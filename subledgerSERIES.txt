@@ -1,0 +1,34 @@
+Public _cCountsts, _CountDocNo
+
+		select  sublgr_series
+		Set Order To SERIES4 && alltrim(ttype) + alltrim(dept_code)
+		Seek 'DOC_NO' + Alltrim(Thisform.txtfromDep.Value)
+		If !Found()
+			Append Blank
+			
+			Replace dept_code	with Alltrim(Thisform.txtfromDep.Value)
+			Replace ttype		with 'DOC_NO'
+			Replace doc_no		with 1
+			Replace doc_flag 	with 'BU-' + Alltrim(Str(doc_no))
+		EndIf 
+			
+			Replace doc_no	with doc_no + 1
+			Replace doc_flag 	with 'BU-' + Alltrim(Str(doc_no))
+			_CountDocNo = sublgr_series.doc_no
+		
+		
+		select  sublgr_series
+		Set Order To SERIES4 && alltrim(ttype) + alltrim(dept_code)
+		Seek 'STS_NO' + Alltrim(Thisform.txtfromDep.Value)
+		If !Found()
+			Append Blank
+			
+			Replace dept_code	with Alltrim(Thisform.txtfromDep.Value)
+			Replace ttype		with 'STS_NO'
+			Replace doc_no		with 1
+			Replace doc_flag 	with 'BU-' + Alltrim(Str(doc_no))
+		EndIf 
+			
+			Replace doc_no	with doc_no + 1
+			Replace doc_flag 	with 'BU-' + Alltrim(Str(doc_no))
+			_cCountsts = sublgr_series.doc_no 

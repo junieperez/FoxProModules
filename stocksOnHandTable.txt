@@ -1,0 +1,22 @@
+Local cTempLGR
+
+cTempLGR = cTemp_Path + Sys(2015)
+
+Select 0
+Create Table &cTempLGR (TMP_ITEMCD 		C(8)	, ;
+	TMP_DESC 		C(40)	, ;
+	TMP_SPECS  		C(60)	, ;
+	TMP_QOH 		N(15,2)	, ;
+	TMP_UOM			C(6)	, ;
+	TMP_ACOST		N(20,5) , ;
+	TMP_ADATE		D		, ;
+	TMP_QIN			N(15,2) , ;
+	TMP_QOUT		N(15,2)	, ;
+	TMP_ITYPE		C(20))
+
+Index On Alltrim(TMP_ITEMCD) Tag TMP1
+Index On Alltrim(TMP_DESC) Tag TMP2
+Index On ALLTRIM(TMP_ITEMCD) + Alltrim(tmp_uom) tag tmp3
+
+Use
+Use &cTempLGR Alias TEMPLGR In 0  Exclusive 

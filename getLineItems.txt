@@ -1,0 +1,39 @@
+*create addEColumns [set # of dimensions depending on column]
+*first [*,1] = is for tmp column name 
+*second [*,2] = is for get column name
+*send value for find for
+
+PARAMETERS tmpTblName,gettblName,findIN,findFor
+PRIVATE searchIN,getReplace,getColColumnLen,getFromField ,addFromField  
+searchIN = getTblName + "." + findIN
+
+SELECT &getTblName
+IF VARTYPE(&searchIN) = "N"
+	SET FILTER TO &searchIN = findFor
+ELSE
+	IF VARTYPE(&searchIN) = "C"
+	SET FILTER TO ALLTRIM(UPPER(&searchIN)) = ALLTRIM(UPPER(findFor))
+	endif
+ENDIF
+SELECT &getTblName
+GO top
+DO WHILE !EOF()
+	SELECT &tmpTblName
+	SET FILTER TO
+	GO top
+	APPEND BLANK
+	getColColumnLen = ALEN(addEColumns,1)
+	FOR x=1 TO getColColumnLen STEP 1
+		getFromField = getTblName + "." + addEColumns(x,2)
+		addFromField = tmpTblName + "." + addEColumns(x,1)
+		SELECT &tmpTblName
+		IF VARTYPE(&getFromField) = "C"
+			REPLACE &addFromField WITH ALLTRIM(UPPER(&getFromField))
+		ELSE
+			replace &addFromField WITH &getFromField
+		endif
+	next
+	
+SELECT &getTblName
+SKIP
+enddo

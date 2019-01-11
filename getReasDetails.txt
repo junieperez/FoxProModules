@@ -1,0 +1,10 @@
+PARAMETERS varRCode
+IF !USED("REASON_MST")
+	DO usetables WITH "REASON_MST"
+ENDIF
+SELECT REASON_MST
+SET ORDER to irCode &&STR(reas_code,8)
+SEEK(STR(varRCode,8))
+IF FOUND()
+	RETURN ALLTRIM(UPPER(REASON_MST.itm_desc))
+endif

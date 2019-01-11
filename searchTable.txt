@@ -1,0 +1,32 @@
+PARAMETERS tblname,searchin,searchFor,searchType,matchtype
+
+SELECT &tblname
+SET FILTER TO
+GO top
+
+IF searchType = "LOCATE"
+	DO case
+		CASE matchtype = "n"
+			LOCATE FOR &tblname.&searchin = searchin
+		CASE matchtype = "c" 
+			LOCATE FOR ALLTRIM(UPPER(&tblname.&searchin)) = ALLTRIM(UPPER(searchin))	
+	ENDCASE
+ENDIF
+
+IF searchType = "FILTER"
+	DO case
+		CASE matchtype = "n"
+				SET filter TO ALLTRIM(UPPER(&tblname.&searchin)) = ALLTRIM(UPPER(searchin))
+					IF FOUND()
+						SELECT &tblname
+						GO top
+					endif
+		CASE matchtype = "c"
+				SET FILTER TO ALLTRIM(UPPER(&tblname.&searchin)) = ALLTRIM(UPPER(searchin))
+					IF FOUND()
+						SELECT &tblname
+						GO top
+					endif
+	endcase
+ENDIF
+

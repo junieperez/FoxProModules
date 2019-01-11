@@ -1,0 +1,80 @@
+*used to create temporary tables
+*reserve "tblColumns" variable and make it to public
+*sample usage
+*DIMENSION tblColumns(4,2)
+*tblColumns[1,1] = "us_iCode"
+*tblColumns[1,2] = "c(10)"
+*tblColumns[2,1] = "us_iDesc"
+*tblColumns[2,2] = "c(100)"
+*tblColumns[3,1] = "us_iQty"
+*tblColumns[3,2] = "n(10)"
+*tblColumns[4,1] = "us_uom"
+*tblColumns[4,2] = "c(10)"
+
+*thisform.createtmptable("unusedsup","unusedSup","",0)
+
+PARAMETERS fileName,tableName,indexString,tblExclusive
+
+cTempVar = cTemp_Path+ "_"+filename+"_" +SYS(3)
+IF FILE(cTempVar+".dbf")
+	IF !EMPTY(indexString)
+		IF tblExclusive = 1 
+			USE &cTempVar ORDER 1 ALIAS  
+
+&tableName IN 0 EXCLUSIVE
+		ELSE
+			USE &cTempVar ORDER 1 ALIAS  
+
+&tableName 
+		endif
+	ELSE
+		IF tblExclusive = 1 
+			USE &cTempVar ALIAS &tableName IN 0 exclusive
+		ELSE
+			USE &cTempVar ALIAS &tableName IN 0 
+		ENDIF
+	ENDIF
+ELSE
+	getColString = ""
+	getColColumnLen = ALEN(tblColumns,1)
+	FOR x=1 TO getColColumnLen STEP 1
+			IF x > 1
+				getColString = getColString + ", "
+			endif
+		FOR y=1 TO 2 STEP 1
+		IF y = 1
+			getColString = getColString + tblColumns(x,y)
+		ELSE
+			getColstring = getColString + " "
+			getColString = getColString + tblColumns(x,y)
+		endif
+		ENDFOR
+	ENDFOR
+	CREATE TABLE &cTempVar (&getColString)
+endif
+	
+IF !EMPTY(indexString) 
+&indexString
+USE	
+	IF tblExclusive = 1 
+			USE &cTempVar ORDER 1 ALIAS  
+
+&tableName IN 0 EXCLUSIVE
+	ELSE
+			USE &cTempVar ORDER 1 ALIAS  
+
+&tableName 
+	ENDIF
+	
+ELSE
+USE	
+	IF tblExclusive = 1 
+		IF !used(tableName)
+		USE &cTempVar ALIAS &tableName IN 0 exclusive
+		endif
+	ELSE
+		IF !used(tableName)
+		USE &cTempVar ALIAS &tableName IN 0 
+		ENDIF
+	ENDIF
+endif

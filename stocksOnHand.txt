@@ -1,0 +1,45 @@
+ Select TEMPLGR
+Set Safety Off
+Zap 
+Set Safety On
+
+Select sub_lgr
+Go Top
+Do While !Eof()
+
+	If  (Alltrim(sub_lgr.lgr_stat) == 'RECEIVED' Or Alltrim(sub_lgr.lgr_stat) == 'RELEASED'  Or ; 
+	    Alltrim(sub_lgr.lgr_stat) == 'CONSUMED' ) 
+
+		Select TEMPLGR
+		Set Order To 3
+		Go Top
+		Seek Alltrim(sub_lgr->LGR_ITMCD) + Alltrim(sub_lgr->lgr_uom)
+		If !Found()
+			Append Blank
+		Endif
+
+		Replace TEMPLGR->tmp_itemcd		With sub_lgr->LGR_ITMCD
+		Replace TEMPLGR->TMP_QIN		With TEMPLGR->TMP_QIN+ sub_lgr->LGR_QIN
+		Replace TEMPLGR->TMP_QOUT		With TEMPLGR->TMP_QOUT+ sub_lgr->LGR_QOUT
+		Replace TEMPLGR->TMP_ACOST		With sub_lgr->LGR_UCST
+		Replace TEMPLGR->TMP_ADATE		With sub_lgr->LGR_DATE
+		Replace TEMPLGR->TMP_UOM		With sub_lgr->LGR_UOM
+  
+		Select ITEM_MST
+		Set Order To 1
+		Go Top
+		Seek Alltrim(sub_lgr->LGR_ITMCD)
+		If Found()
+			Replace TEMPLGR->TMP_DESC	With ITEM_MST->ITM_DESC
+			Replace TEMPLGR->TMP_SPECS	With ITEM_MST->ITM_SPECS
+		EndIf
+		
+		Replace TEMPLGR->TMP_QOH 		With TEMPLGR->TMP_QIN - TEMPLGR->TMP_QOUT
+
+	Endif
+
+	Select sub_lgr
+	Skip
+
+
+Enddo 
